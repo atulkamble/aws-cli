@@ -2,10 +2,11 @@
 
 1. **Create IAM User (in AWS Console):**
 
-   * Go to **IAM → Users → Add user**
-   * Username: `admin`
+   * Go to **IAM → Users → Add user** atul
+   * Username: `atul`
+   * add user to group admin 
    * Access type: ✅ **Programmatic access**
-   * Permissions: Attach existing policies directly → ✅ **AdministratorAccess**
+   * Group Permissions: Attach existing policies directly → ✅ **AdministratorAccess**
    * Download `.csv` file with **Access Key ID** and **Secret Access Key**
 
 ---
