@@ -16,6 +16,17 @@ aws ec2 run-instances \
   --security-group-ids sg-02f72ff6dbca76714 \
   --count 1
 
+aws ec2 run-instances \
+  --image-id ami-0abcdef1234567890 \
+  --instance-type t2.micro \
+  --count 1 \
+  --key-name myKey \
+  --security-group-ids sg-0123456789abcdef0 \
+  --subnet-id subnet-12345678 \
+  --associate-public-ip-address \
+  --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=MyInstance}]'
+
+
 // powershell
 
 aws ec2 run-instances --image-id ami-08a6efd148b1f7504 --subnet-id subnet-0f135e475d49526d6 --instance-type t3.micro --key-name jenkins --security-group-ids sg-02f72ff6dbca76714 --count 1
