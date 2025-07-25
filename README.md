@@ -159,3 +159,128 @@ aws s3 ls
   👉 [https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html](https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html)
 
 
+Here's a comprehensive list of essential **AWS CLI commands** for **EC2** and **S3** operations.
+
+---
+
+## ✅ EC2 CLI Commands
+
+### 📋 General
+
+| Description         | Command                                                          |
+| ------------------- | ---------------------------------------------------------------- |
+| List instances      | `aws ec2 describe-instances`                                     |
+| Start an instance   | `aws ec2 start-instances --instance-ids i-xxxxxxxxxxxxxxxxx`     |
+| Stop an instance    | `aws ec2 stop-instances --instance-ids i-xxxxxxxxxxxxxxxxx`      |
+| Terminate instance  | `aws ec2 terminate-instances --instance-ids i-xxxxxxxxxxxxxxxxx` |
+| Reboot instance     | `aws ec2 reboot-instances --instance-ids i-xxxxxxxxxxxxxxxxx`    |
+| Get instance status | `aws ec2 describe-instance-status`                               |
+
+---
+
+### 🛠 Launch Instance
+
+```bash
+aws ec2 run-instances \
+  --image-id ami-xxxxxxxx \
+  --instance-type t2.micro \
+  --key-name my-key \
+  --security-groups my-sg \
+  --count 1
+```
+
+---
+
+### 🔑 Key Pairs
+
+| Description        | Command                                     |
+| ------------------ | ------------------------------------------- |
+| Create key pair    | `aws ec2 create-key-pair --key-name my-key` |
+| Describe key pairs | `aws ec2 describe-key-pairs`                |
+| Delete key pair    | `aws ec2 delete-key-pair --key-name my-key` |
+
+---
+
+### 🔐 Security Groups
+
+| Description            | Command                                                                                                 |
+| ---------------------- | ------------------------------------------------------------------------------------------------------- |
+| Create security group  | `aws ec2 create-security-group --group-name my-sg --description "My SG"`                                |
+| Authorize inbound rule | `aws ec2 authorize-security-group-ingress --group-name my-sg --protocol tcp --port 22 --cidr 0.0.0.0/0` |
+| Describe SGs           | `aws ec2 describe-security-groups`                                                                      |
+| Delete SG              | `aws ec2 delete-security-group --group-name my-sg`                                                      |
+
+---
+
+### 📍 Elastic IP
+
+| Description     | Command                                                                                |
+| --------------- | -------------------------------------------------------------------------------------- |
+| Allocate IP     | `aws ec2 allocate-address`                                                             |
+| Associate IP    | `aws ec2 associate-address --instance-id i-xxxxxxxx --allocation-id eipalloc-xxxxxxxx` |
+| Disassociate IP | `aws ec2 disassociate-address --association-id eipassoc-xxxxxxxx`                      |
+| Release IP      | `aws ec2 release-address --allocation-id eipalloc-xxxxxxxx`                            |
+
+---
+
+### 📝 AMIs & Snapshots
+
+| Description                | Command                                                        |
+| -------------------------- | -------------------------------------------------------------- |
+| List available AMIs        | `aws ec2 describe-images --owners self amazon`                 |
+| Create image from instance | `aws ec2 create-image --instance-id i-xxxxxx --name "MyImage"` |
+| Describe snapshots         | `aws ec2 describe-snapshots --owner-ids self`                  |
+
+---
+
+## ✅ S3 CLI Commands
+
+### 📂 Bucket Operations
+
+| Description          | Command                         |
+| -------------------- | ------------------------------- |
+| List buckets         | `aws s3 ls`                     |
+| Create bucket        | `aws s3 mb s3://my-bucket-name` |
+| Delete bucket        | `aws s3 rb s3://my-bucket-name` |
+| List bucket contents | `aws s3 ls s3://my-bucket-name` |
+
+---
+
+### 📤 File Upload/Download
+
+| Description              | Command                                       |
+| ------------------------ | --------------------------------------------- |
+| Upload file              | `aws s3 cp file.txt s3://my-bucket-name/`     |
+| Download file            | `aws s3 cp s3://my-bucket-name/file.txt ./`   |
+| Sync directory to bucket | `aws s3 sync ./mydir s3://my-bucket-name`     |
+| Sync bucket to local     | `aws s3 sync s3://my-bucket-name ./local-dir` |
+
+---
+
+### 🧹 Delete Files
+
+| Description             | Command                                     |
+| ----------------------- | ------------------------------------------- |
+| Delete file from bucket | `aws s3 rm s3://my-bucket-name/file.txt`    |
+| Delete all objects      | `aws s3 rm s3://my-bucket-name --recursive` |
+
+---
+
+### 🌐 Static Website Hosting
+
+| Description                | Command                                                                                               |
+| -------------------------- | ----------------------------------------------------------------------------------------------------- |
+| Enable website hosting     | `aws s3 website s3://my-bucket-name/ --index-document index.html --error-document error.html`         |
+| Set bucket policy (public) | Via JSON file with: `aws s3api put-bucket-policy --bucket my-bucket-name --policy file://policy.json` |
+
+---
+
+### 🧾 Bucket Policies
+
+| Description          | Command                                                  |
+| -------------------- | -------------------------------------------------------- |
+| Get bucket policy    | `aws s3api get-bucket-policy --bucket my-bucket-name`    |
+| Delete bucket policy | `aws s3api delete-bucket-policy --bucket my-bucket-name` |
+
+---
+
