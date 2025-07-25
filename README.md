@@ -284,3 +284,87 @@ aws ec2 run-instances \
 
 ---
 
+Here's a complete list of essential **AWS CLI commands for AWS IAM** operations — for managing users, groups, roles, policies, and credentials.
+
+---
+
+## ✅ IAM User Management
+
+| Description      | Command                                  |
+| ---------------- | ---------------------------------------- |
+| List users       | `aws iam list-users`                     |
+| Create user      | `aws iam create-user --user-name myuser` |
+| Delete user      | `aws iam delete-user --user-name myuser` |
+| Get user details | `aws iam get-user --user-name myuser`    |
+
+---
+
+### 🔐 Access Keys
+
+| Description       | Command                                                                   |
+| ----------------- | ------------------------------------------------------------------------- |
+| Create access key | `aws iam create-access-key --user-name myuser`                            |
+| List access keys  | `aws iam list-access-keys --user-name myuser`                             |
+| Delete access key | `aws iam delete-access-key --access-key-id AKIAxxxxxx --user-name myuser` |
+
+---
+
+## 🧑‍🤝‍🧑 IAM Groups
+
+| Description            | Command                                                                  |
+| ---------------------- | ------------------------------------------------------------------------ |
+| List groups            | `aws iam list-groups`                                                    |
+| Create group           | `aws iam create-group --group-name mygroup`                              |
+| Add user to group      | `aws iam add-user-to-group --group-name mygroup --user-name myuser`      |
+| Remove user from group | `aws iam remove-user-from-group --group-name mygroup --user-name myuser` |
+| Delete group           | `aws iam delete-group --group-name mygroup`                              |
+
+---
+
+## 📜 IAM Policies
+
+| Description             | Command                                                                                                   |
+| ----------------------- | --------------------------------------------------------------------------------------------------------- |
+| List all policies       | `aws iam list-policies`                                                                                   |
+| Attach policy to user   | `aws iam attach-user-policy --user-name myuser --policy-arn arn:aws:iam::aws:policy/AdministratorAccess`  |
+| Detach policy from user | `aws iam detach-user-policy --user-name myuser --policy-arn arn:aws:iam::aws:policy/AdministratorAccess`  |
+| Attach policy to group  | `aws iam attach-group-policy --group-name mygroup --policy-arn arn:aws:iam::aws:policy/IAMReadOnlyAccess` |
+| Create inline policy    | `aws iam put-user-policy --user-name myuser --policy-name MyPolicy --policy-document file://policy.json`  |
+
+---
+
+## 🎭 IAM Roles
+
+| Description             | Command                                                                                             |
+| ----------------------- | --------------------------------------------------------------------------------------------------- |
+| List roles              | `aws iam list-roles`                                                                                |
+| Create role             | `aws iam create-role --role-name myrole --assume-role-policy-document file://trust-policy.json`     |
+| Attach policy to role   | `aws iam attach-role-policy --role-name myrole --policy-arn arn:aws:iam::aws:policy/ReadOnlyAccess` |
+| Detach policy from role | `aws iam detach-role-policy --role-name myrole --policy-arn arn:aws:iam::aws:policy/ReadOnlyAccess` |
+| Delete role             | `aws iam delete-role --role-name myrole`                                                            |
+
+---
+
+## 🔎 Permissions and Validation
+
+| Description                  | Command                                                                                                                                                                             |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Simulate user permissions    | `aws iam simulate-principal-policy --policy-source-arn arn:aws:iam::123456789012:user/myuser --action-names s3:ListBucket`                                                          |
+| Get user/group/role policies | `aws iam list-attached-user-policies --user-name myuser`<br>`aws iam list-attached-group-policies --group-name mygroup`<br>`aws iam list-attached-role-policies --role-name myrole` |
+
+---
+
+## 📦 Example: Create Full Admin User via CLI
+
+```bash
+aws iam create-user --user-name devadmin
+
+aws iam attach-user-policy \
+  --user-name devadmin \
+  --policy-arn arn:aws:iam::aws:policy/AdministratorAccess
+
+aws iam create-access-key --user-name devadmin
+```
+
+---
+
