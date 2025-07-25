@@ -1,3 +1,4 @@
+```
 // aws clli 
 
 aws ec2 run-instances \
@@ -49,7 +50,42 @@ aws s3 rb s3://mybucketatulkamble
 
 aws s3 ls 
 
+// list users
 
+aws iam list-users
+
+// list groups 
+
+aws iam list-groups
+
+// create user 
+
+aws iam create-user --user-name bob
+
+// create group
+
+aws iam create-group --group-name dev
+
+// add user to group
+
+aws iam add-user-to-group --group-name dev --user-name bob 
+
+// list users from a group 
+
+aws iam get-group --group-name dev 
+
+// remove user from group 
+
+aws iam remove-user-from-group --group-name dev --user-name bob
+
+// delete group 
+
+aws iam delete-group --group-name dev
+
+// delete user 
+
+aws iam delete-user --user-name bob
+```
 
 
 
