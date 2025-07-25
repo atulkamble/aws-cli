@@ -2,6 +2,13 @@
 // aws clli 
 
 aws ec2 run-instances \
+  --image-id ami-0abcdef1234567890 \
+  --count 1 \
+  --instance-type t2.micro \
+  --key-name myKey \
+  --security-groups MySecGroup
+
+aws ec2 run-instances \
   --image-id ami-08a6efd148b1f7504 \
   --subnet-id subnet-0f135e475d49526d6 \
   --instance-type t3.micro \
