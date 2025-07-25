@@ -367,4 +367,163 @@ aws iam create-access-key --user-name devadmin
 ```
 
 ---
+# 📖 Modernized AWS CLI Quick Reference & Tutorials
+
+Upgrade your AWS CLI skills with **practical, up-to-date commands and tutorials** covering not just IAM, EC2, and S3—but also popular services like RDS (databases), Lambda (serverless compute), VPC (networking), CloudWatch (monitoring), and more.
+
+## 🚦 Basics: CLI Setup and Testing
+
+**(Already covered above; no changes needed.)**
+
+## 🏆 Newly Added: CLI Essentials for Key AWS Services
+
+### 🗄️ RDS (Relational Database Service)
+
+| Task                                    | Command                                                                                                   |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| List DB Instances                       | `aws rds describe-db-instances`                                                                           |
+| Create MySQL Instance                   | <br>```aws rds create-db-instance --db-instance-identifier mydb --engine mysql --master-username admin --master-user-password <PASSWORD> --db-instance-class db.t3.micro --allocated-storage 20```
+| Delete DB Instance                      | `aws rds delete-db-instance --db-instance-identifier mydb --skip-final-snapshot`                          |
+| List Snapshots                          | `aws rds describe-db-snapshots`                                                                           |
+| Create Manual Snapshot                  | `aws rds create-db-snapshot --db-instance-identifier mydb --db-snapshot-identifier mydb-snap1`           |
+| Restore DB from Snapshot                | `aws rds restore-db-instance-from-db-snapshot --db-instance-identifier newdb --db-snapshot-identifier mydb-snap1` |
+
+### 🛡️ VPC (Virtual Private Cloud)
+
+| Task                         | Command                                                                                     |
+| ---------------------------- | -------------------------------------------------------------------------------------------|
+| List VPCs                    | `aws ec2 describe-vpcs`                                                                    |
+| Create VPC                   | `aws ec2 create-vpc --cidr-block 10.0.0.0/16`                                              |
+| List Subnets                 | `aws ec2 describe-subnets`                                                                 |
+| Create Subnet                | `aws ec2 create-subnet --vpc-id vpc-xxxxxx --cidr-block 10.0.1.0/24`                       |
+| List Security Groups         | `aws ec2 describe-security-groups`                                                         |
+| Create Internet Gateway      | `aws ec2 create-internet-gateway`                                                          |
+| Attach IGW to VPC            | `aws ec2 attach-internet-gateway --internet-gateway-id igw-xxxxxx --vpc-id vpc-xxxxxx`     |
+
+### 💡 Lambda (Serverless Compute)
+
+| Task                                   | Command                                                                                            |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| List Functions                         | `aws lambda list-functions`                                                                         |
+| Create Function (from ZIP)              | `aws lambda create-function --function-name myfunc --runtime python3.9 --role arn:aws:iam::xxxx:role/lambda-role --handler lambda_function.lambda_handler --zip-file fileb://function.zip` |
+| Invoke Function                        | `aws lambda invoke --function-name myfunc output.txt`                                               |
+| Delete Function                        | `aws lambda delete-function --function-name myfunc`                                                 |
+
+### 📊 CloudWatch (Logs & Alarms)
+
+| Task                                       | Command                                                                              |
+| ------------------------------------------- | ------------------------------------------------------------------------------------ |
+| List Log Groups                            | `aws logs describe-log-groups`                                                       |
+| Tail Log Stream                            | `aws logs tail /aws/lambda/myfunc`                                                   |
+| Put Metric Alarm Example                    | <br>```aws cloudwatch put-metric-alarm --alarm-name CPUAlarm --metric-name CPUUtilization --namespace AWS/EC2 --statistic Average --period 300 --threshold 80 --comparison-operator GreaterThanOrEqualToThreshold --dimension Name=InstanceId,Value=i-xxxxxx --evaluation-periods 2 --alarm-actions arn:aws:sns:... --unit Percent```
+
+### 🔔 SNS (Simple Notification Service)
+
+| Task                | Command                                                             |
+| ------------------- | ------------------------------------------------------------------- |
+| List Topics         | `aws sns list-topics`                                               |
+| Create Topic        | `aws sns create-topic --name my-topic`                              |
+| Subscribe           | `aws sns subscribe --topic-arn arn:aws:sns:... --protocol email --notification-endpoint my@email.com` |
+| Publish Message     | `aws sns publish --topic-arn arn:aws:sns:... --message "Hello SNS"` |
+| Delete Topic        | `aws sns delete-topic --topic-arn arn:aws:sns:...`                  |
+
+### 🕸️ SQS (Simple Queue Service)
+
+| Task                 | Command                                                          |
+| -------------------- | ---------------------------------------------------------------- |
+| List Queues          | `aws sqs list-queues`                                            |
+| Create Queue         | `aws sqs create-queue --queue-name myqueue`                      |
+| Send Message         | `aws sqs send-message --queue-url <queue-url> --message-body "Hello"` |
+| Receive Message      | `aws sqs receive-message --queue-url <queue-url>`                |
+| Delete Queue         | `aws sqs delete-queue --queue-url <queue-url>`                   |
+
+### 🌉 CloudFormation
+
+| Task                           | Command                                                            |
+| ------------------------------ | ------------------------------------------------------------------ |
+| List Stacks                    | `aws cloudformation list-stacks`                                   |
+| Create Stack                   | `aws cloudformation create-stack --stack-name mystack --template-body file://template.yaml` |
+| Delete Stack                   | `aws cloudformation delete-stack --stack-name mystack`              |
+
+## 🚀 Example Tutorials for Common Scenarios
+
+### Quick EC2 Launch and Connect
+
+1. **Launch Instance:**
+    ```bash
+    aws ec2 run-instances \
+      --image-id ami-xxxxxx \
+      --instance-type t2.micro \
+      --key-name my-key \
+      --security-group-ids sg-xxxxxx \
+      --subnet-id subnet-xxxxxx \
+      --associate-public-ip-address \
+      --count 1
+    ```
+2. **Get Public IP:**
+    ```bash
+    aws ec2 describe-instances --filters Name=instance-id,Values=i-xxxxxx --query "Reservations[*].Instances[*].PublicIpAddress" --output text
+    ```
+3. **SSH to Instance:**
+    ```bash
+    ssh -i my-key.pem ubuntu@<PUBLIC_IP>
+    ```
+
+### Add an Inline IAM Policy to User
+
+```bash
+aws iam put-user-policy \
+  --user-name bob \
+  --policy-name s3-full-access \
+  --policy-document file://s3-full-access-policy.json
+```
+Where `s3-full-access-policy.json` is a JSON file with your desired permissions.
+
+### Backup and Restore RDS Instance
+
+```bash
+# Create a manual RDS snapshot
+aws rds create-db-snapshot --db-instance-identifier mydb --db-snapshot-identifier mydb-snap1
+
+# Restore new instance from snapshot
+aws rds restore-db-instance-from-db-snapshot --db-instance-identifier mydb-copy --db-snapshot-identifier mydb-snap1
+```
+
+### Trigger Lambda from CLI
+
+```bash
+aws lambda invoke --function-name myfunc response.json
+cat response.json
+```
+
+### Monitor EC2 Instance CPU via CloudWatch
+
+```bash
+aws cloudwatch get-metric-statistics \
+  --metric-name CPUUtilization \
+  --start-time 2025-07-25T00:00:00Z \
+  --end-time 2025-07-25T12:00:00Z \
+  --period 3600 \
+  --namespace AWS/EC2 \
+  --statistics Average \
+  --dimensions Name=InstanceId,Value=i-xxxxxx
+```
+
+## ⚡ Pro Tips
+
+- Use `--profile <name>` for multiple AWS accounts/profiles.
+- Try adding `--output yaml` or `--output table` for more readable CLI output.
+- Always check the default region (`aws configure list`) to avoid resource misplacement.
+- Set `--no-cli-pager` in CLI config to suppress interactive output.
+
+## 🔗 Quick References
+
+- **Full AWS CLI Command Reference:** [https://docs.aws.amazon.com/cli/latest/reference/](https://docs.aws.amazon.com/cli/latest/reference/)
+- **Official AWS CLI Examples:** [https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-examples.html](https://docs.aws.amazon.com/cli/latest/userguide/cli-usage-examples.html)
+
+This expanded guide ensures you are ready for common and advanced AWS tasks directly from your terminal. Try out these commands in a safe environment and modify placeholders (`<ids>`, `<names>`, etc.) for your use case.
+
+Let me know if you need tutorials for any other AWS services or deeper automation examples!
+
+Sources
 
